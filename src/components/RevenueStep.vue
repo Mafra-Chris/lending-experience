@@ -7,15 +7,16 @@
       label-position="top"
     >
       <el-form-item label="Receita média mensal" prop="monthlyRevenue">
-        <el-input v-model="signupForm.monthlyRevenue"></el-input>
+        <el-input v-model="monthlyRevenue"></el-input>
         <div class="revenue-slider-label">
           <span>0</span><span>2 milhões</span>
         </div>
         <div class="revenue-slider">
           <el-slider
-            v-model="signupForm.monthlyRevenue"
+            v-model="monthlyRevenue"
             :min="0"
             :max="2000000"
+            :step="1000"
           >
           </el-slider>
         </div>
@@ -24,10 +25,7 @@
         label="Como você planeja usar esse crédito?"
         prop="moneyPurpose"
       >
-        <el-select
-          v-model="signupForm.moneyPurpose"
-          placeholder="Escolha o propósito"
-        >
+        <el-select v-model="moneyPurpose" placeholder="Escolha o propósito">
           <el-option
             v-for="item in purposeOptions"
             :key="item.value"
@@ -59,20 +57,18 @@ export default Vue.extend({
   name: 'Signup',
   data() {
     return {
-      signupForm: {
-        name: '',
-        cnpj: '',
-        website: '',
-        segmentOption: '',
-        monthlyRevenue: 0,
-        moneyPurpose: '',
-        termsChecked: false,
-      },
       rules: {
-        name: [
+        monthlyRevenue: [
           {
             required: true,
-            message: 'Insira o nome da empresa.',
+            message: 'Insira a sua receita médio mensal.',
+            trigger: 'blur',
+          },
+        ],
+        moneyPurpose: [
+          {
+            required: true,
+            message: 'Escolha o propósito para uso de crédito.',
             trigger: 'blur',
           },
         ],
@@ -103,7 +99,7 @@ export default Vue.extend({
         return this.$store.state.signup.monthlyRevenue;
       },
       set(value: string) {
-        this.$store.commit('setMonthlyRevenue', value);
+        this.$store.commit('setMonthlyRevenue', { monthlyRevenue: value });
       },
     },
     moneyPurpose: {
@@ -111,8 +107,14 @@ export default Vue.extend({
         return this.$store.state.signup.moneyPurpose;
       },
       set(value: string) {
-        this.$store.commit('setMoneyPurpose', value);
+        this.$store.commit('setMoneyPurpose', { moneyPurpose: value });
       },
+    },
+    signupForm(): object {
+      return {
+        monthlyRevenue: this.monthlyRevenue,
+        moneyPurpose: this.moneyPurpose,
+      };
     },
   },
   methods: {

@@ -7,7 +7,7 @@
       label-position="top"
     >
       <el-form-item label="Nome" prop="name">
-        <el-input v-model="signupForm.name"></el-input>
+        <el-input v-model="name"></el-input>
       </el-form-item>
       <el-form-item
         label="Para qual CNPJ deseja solicitar crédito?"
@@ -17,10 +17,7 @@
         <el-input v-model="cnpj"></el-input>
       </el-form-item>
       <el-form-item label="Qual segmento atua?" prop="segmentOption">
-        <el-select
-          v-model="signupForm.segmentOption"
-          placeholder="Escolha o segmento"
-        >
+        <el-select v-model="segmentOption" placeholder="Escolha o segmento">
           <el-option
             v-for="item in segmentOptions"
             :key="item.value"
@@ -35,8 +32,9 @@
         prop="website"
         placeholder="www.minhaempresa.com.br"
       >
-        <el-input v-model="signupForm.website"></el-input>
+        <el-input v-model="website"></el-input>
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="nextStep()" class="btn-next"
           >Avançar</el-button
@@ -57,6 +55,27 @@ export default Vue.extend({
           {
             required: true,
             message: 'Insira o nome da empresa.',
+            trigger: 'blur',
+          },
+        ],
+        cnpj: [
+          {
+            required: true,
+            message: 'Insira o cnpj.',
+            trigger: 'blur',
+          },
+        ],
+        segmentOption: [
+          {
+            required: true,
+            message: 'Escolha o segmento da empresa.',
+            trigger: 'blur',
+          },
+        ],
+        website: [
+          {
+            required: true,
+            message: 'Insira o website da empresa.',
             trigger: 'blur',
           },
         ],
@@ -84,39 +103,45 @@ export default Vue.extend({
     };
   },
   computed: {
+    name: {
+      get() {
+        return this.$store.state.signup.name;
+      },
+      set(value: string) {
+        this.$store.commit('setName', { name: value });
+      },
+    },
     cnpj: {
       get() {
         return this.$store.state.signup.cnpj;
       },
       set(value: string) {
-        this.$store.commit('setCnpj', value);
+        this.$store.commit('setCnpj', { cnpj: value });
       },
     },
-    // segmentOption: {
-    //   set(value: string) {
-    //     this.$store.commit('setSegmentOption', value);
-    //   },
-    // },
-    // website: {
-    //   set(value: string) {
-    //     this.$store.commit('setWebsite', value);
-    //   },
-    // },
-    signupForm: {
+    segmentOption: {
       get() {
-        return {
-          name: this.$store.state.signup.name,
-          cnpj: this.$store.state.signup.cnpj,
-          website: this.$store.state.signup.website,
-          segmentOption: this.$store.state.signup.segmentOption,
-        };
+        return this.$store.state.signup.segmentOption;
       },
       set(value: string) {
-        this.$store.commit('setName', { name: value });
-        // this.$store.commit('setCnpj', value);
-        // this.$store.commit('setWebsite', value);
-        // this.$store.commit('setsegmentOption', value);
+        this.$store.commit('setSegmentOption', { segmentOption: value });
       },
+    },
+    website: {
+      get() {
+        return this.$store.state.signup.website;
+      },
+      set(value: string) {
+        this.$store.commit('setWebsite', { website: value });
+      },
+    },
+    signupForm(): object {
+      return {
+        name: this.name,
+        cnpj: this.cnpj,
+        website: this.website,
+        segmentOption: this.segmentOption,
+      };
     },
   },
   methods: {
