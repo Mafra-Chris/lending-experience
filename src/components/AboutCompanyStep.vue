@@ -49,6 +49,42 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'AboutCompanyStep',
   data() {
+    const verifySector = (digits: number, cnpj: string) => {
+      const slice = cnpj.slice(0, digits);
+      let factor = digits - 7;
+      let sum = 0;
+
+      for (let i = digits; i >= 1; i--) {
+        const n = parseInt(slice[digits - i]);
+        sum += n * factor--;
+        if (factor < 2) factor = 9;
+      }
+
+      const result = 11 - (sum % 11);
+
+      return result > 9 ? 0 : result;
+    };
+
+    let validateCNPJ = (rule: object, value: string, callback: Function) => {
+      let cnpj = value.replace(/[^\d]+/g, '');
+      const items = [...new Set(cnpj)];
+      const digits = cnpj.slice(12);
+
+      // Valida 1o. dígito verificador
+      const digit0 = verifySector(12, cnpj);
+      if (digit0.toString() !== digits[0])
+        return callback(new Error('Por favor, verifique se o CNPJ é válido'));
+
+      // Valida 2o. dígito verificador
+      const digit1 = verifySector(13, cnpj);
+      if (digit1.toString() !== digits[1])
+        return callback(new Error('Por favor, verifique se o CNPJ é válido'));
+
+      if (cnpj.length !== 14 || items.length === 1)
+        return callback(new Error('Por favor, verifique se o CNPJ é válido'));
+
+      return callback();
+    };
     return {
       rules: {
         name: [
@@ -61,21 +97,22 @@ export default Vue.extend({
         cnpj: [
           {
             required: true,
-            message: 'Insira o cnpj.',
+            message: 'Obrigatório.',
             trigger: 'blur',
           },
+          { validator: validateCNPJ, trigger: 'blur' },
         ],
         segmentOption: [
           {
             required: true,
-            message: 'Escolha o segmento da empresa.',
+            message: 'Obrigatório.',
             trigger: 'blur',
           },
         ],
         website: [
           {
             required: true,
-            message: 'Insira o website da empresa.',
+            message: 'Obrigatório.',
             trigger: 'blur',
           },
         ],
@@ -116,7 +153,12 @@ export default Vue.extend({
         return this.$store.state.signup.cnpj;
       },
       set(value: string) {
-        this.$store.commit('setCnpj', { cnpj: value });
+        let cnpj = value.replace(/[^\d]+/g, '');
+        cnpj = cnpj.replace(
+          /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+          '$1.$2.$3/$4-$5'
+        );
+        this.$store.commit('setCnpj', { cnpj: cnpj });
       },
     },
     segmentOption: {
