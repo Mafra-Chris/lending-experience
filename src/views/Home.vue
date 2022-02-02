@@ -42,8 +42,15 @@ export default Vue.extend({
   align-items: center;
   height: 100vh;
 }
+
 .login-container {
-  width: 65%;
+  width: 85%;
+}
+
+@media (min-width: 1024px) {
+  .login-container {
+    width: 65%;
+  }
 }
 img {
   object-fit: cover;
