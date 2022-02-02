@@ -16,8 +16,8 @@
           placeholder="Mínimo 8 caracteres"
         ></el-input>
       </el-form-item>
-      <el-form-item prop="termsChecked">
-        <el-checkbox v-model="termsChecked"
+      <el-form-item prop="isTermsChecked">
+        <el-checkbox v-model="isTermsChecked"
           >Li e concordo com os Termos de Uso.</el-checkbox
         >
       </el-form-item>
@@ -42,20 +42,26 @@ import Vue from 'vue';
 export default Vue.extend({
   name: 'Signup',
   data() {
+    const verifyTerms = (rule: object, value: boolean, callback: Function) => {
+      if (value === false) {
+        return callback(new Error('É obrigatório aceitar os termos.'));
+      }
+      return callback();
+    };
     return {
       password: '',
+      isTermsChecked: false,
       rules: {
-        isTermsChecked: [
-          {
-            required: true,
-            message: 'É obrigatório aceitar os termos.',
-            trigger: 'blur',
-          },
-        ],
+        isTermsChecked: [{ validator: verifyTerms, trigger: 'blur' }],
         password: [
           {
             required: true,
             message: 'Insira uma senha válida.',
+            trigger: 'blur',
+          },
+          {
+            min: 8,
+            message: 'Senha deve ter no mínimo 8 caracteres.',
             trigger: 'blur',
           },
         ],
@@ -78,14 +84,15 @@ export default Vue.extend({
         this.$store.commit('setEmail', { email: value });
       },
     },
-    isTermsChecked: {
-      get() {
-        return this.$store.state.signup.isTermsChecked;
-      },
-      set(value: boolean) {
-        this.$store.commit('setIsTermsChecked', { isTermsChecked: value });
-      },
-    },
+    // isTermsChecked: {
+    //   get() {
+    //     return this.$store.state.signup.isTermsChecked;
+    //   },
+    //   set(value: boolean) {
+    //     console.log(value);
+    //     this.$store.commit('setIsTermsChecked', { isTermsChecked: value });
+    //   },
+    // },
     signupForm(): object {
       return {
         email: this.email,
@@ -96,7 +103,16 @@ export default Vue.extend({
   },
   methods: {
     finishForm() {
-      this.$store.commit('incrementCurrentStep');
+      (this.$refs['signupForm'] as HTMLFormElement).validate(
+        (valid: boolean) => {
+          if (valid) {
+            this.$store.commit('setProgressPerc', { progressPerc: 100 });
+            alert(this.$store.state.signup);
+          } else {
+            return false;
+          }
+        }
+      );
     },
     previousStep() {
       this.$store.commit('decrementCurrentStep');

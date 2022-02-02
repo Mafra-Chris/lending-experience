@@ -192,6 +192,7 @@ export default Vue.extend({
         (valid: boolean) => {
           if (valid) {
             this.$store.commit('incrementCurrentStep');
+            this.$store.commit('setProgressPerc', { progressPerc: 40 });
           } else {
             console.log('error submit!!');
             return false;

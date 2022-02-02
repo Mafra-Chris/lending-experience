@@ -12,12 +12,7 @@
           <span>0</span><span>2 milhões</span>
         </div>
         <div class="revenue-slider">
-          <el-slider
-            v-model="monthlyRevenue"
-            :min="0"
-            :max="2000000"
-            :step="1000"
-          >
+          <el-slider v-model="monthlyRevenue" :min="0" :max="2000000" :step="1">
           </el-slider>
         </div>
       </el-form-item>
@@ -57,6 +52,7 @@ export default Vue.extend({
   name: 'Signup',
   data() {
     return {
+      revenue: '',
       rules: {
         monthlyRevenue: [
           {
@@ -99,7 +95,14 @@ export default Vue.extend({
         return this.$store.state.signup.monthlyRevenue;
       },
       set(value: string) {
-        this.$store.commit('setMonthlyRevenue', { monthlyRevenue: value });
+        let monthlyRevenue = parseFloat(value);
+
+        if (monthlyRevenue > 2000000.0) {
+          monthlyRevenue = 2000000.0;
+        }
+        this.$store.commit('setMonthlyRevenue', {
+          monthlyRevenue: monthlyRevenue,
+        });
       },
     },
     moneyPurpose: {
@@ -119,7 +122,16 @@ export default Vue.extend({
   },
   methods: {
     nextStep() {
-      this.$store.commit('incrementCurrentStep');
+      (this.$refs['signupForm'] as HTMLFormElement).validate(
+        (valid: boolean) => {
+          if (valid) {
+            this.$store.commit('setProgressPerc', { progressPerc: 70 });
+            this.$store.commit('incrementCurrentStep');
+          } else {
+            return false;
+          }
+        }
+      );
     },
     previousStep() {
       this.$store.commit('decrementCurrentStep');
