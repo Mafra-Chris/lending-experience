@@ -8,7 +8,7 @@ const state = {
   moneyPurpose: '',
   email: '',
   isTermsChecked: false,
-  progressPerc: 10,
+  progressPerc: 0,
   currentStep: 0
 };
 
@@ -39,8 +39,14 @@ const mutations = {
   setMoneyPurpose(state: any, payload: any) {
     state.moneyPurpose = payload.moneyPurpose
   },
-  setTermsChecked(state: any, payload: any) {
+  setIsTermsChecked(state: any, payload: any) {
     state.termsChecked = payload.termsChecked
+  },
+  setEmail(state: any, payload: any) {
+    state.email = payload.email
+  },
+  setProgressPerc(state: any, payload: any) {
+    state.progressPerc = payload.progressPerc
   },
 
   incrementCurrentStep() {

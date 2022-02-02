@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import SignUp from '../components/SignUp.vue'
+import CreditProposals from '../views/CreditProposals.vue'
 
 Vue.use(VueRouter)
 
@@ -17,6 +18,12 @@ const routes: Array<RouteConfig> = [
     name: 'SignUp',
 
     component: SignUp
+  },
+  {
+    path: '/proposals',
+    name: 'proposals',
+
+    component: CreditProposals
   }
 ]
 
