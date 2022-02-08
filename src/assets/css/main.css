@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+#app {
+  font-family: 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+
+  height: 100vh;
+}
+body {
+  margin: 0;
+  background-color: #201f22;
+  color: #ffffff;
+}
+
+a {
+  text-decoration: none;
+  color: #ffffff;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+.el-progress__text,
+.el-form-item__label,
+.el-checkbox {
+  color: #bbbabf !important;
+}
+
+.el-button--primary,
+.el-progress-bar__inner,
+.el-slider__bar {
+  background-color: #006df8 !important;
+  border-color: #006df8 !important;
+}
+
+.el-slider__button {
+  border: 2px solid #006df8 !important;
+}
+
+.el-button--info {
+  background-color: #414044 !important;
+  border-color: #414044 !important;
+}
+
+.btn-pages {
+  display: flex;
+  gap: 1rem;
+}
+.el-menu.el-menu--horizontal {
+  border-bottom: none !important;
+}
+
+.logo {
+  display: inline;
+  width: 45px;
+  margin-right: 1.2rem;
+}
+
+.brand-blue {
+  color: #006df8;
+}
