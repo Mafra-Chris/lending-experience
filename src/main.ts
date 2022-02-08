@@ -4,10 +4,12 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faChevronCircleRight, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faChevronCircleRight, faPlus, faMinus, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import './assets/css/main.css';
 
-library.add(faChevronCircleRight, faPlus, faMinus)
+library.add(faChevronCircleRight, faPlus, faMinus, faSignOutAlt, faTimesCircle)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
