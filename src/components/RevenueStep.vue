@@ -7,7 +7,7 @@
       label-position="top"
     >
       <el-form-item label="Receita média mensal" prop="monthlyRevenue">
-        <el-input v-model="monthlyRevenue"></el-input>
+        <el-input v-model="monthlyRevenue[0]"></el-input>
         <div class="revenue-slider-label">
           <span>0</span><span>2 milhões</span>
         </div>
@@ -30,7 +30,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <div class="">
+      <div class="btn-pages">
         <el-form-item>
           <el-button type="info" @click="previousStep()" class="btn-next"
             >Voltar</el-button
@@ -92,7 +92,12 @@ export default Vue.extend({
   computed: {
     monthlyRevenue: {
       get() {
-        return this.$store.state.signup.monthlyRevenue;
+        return [
+          this.$store.state.signup.monthlyRevenue.toLocaleString('en-US', {
+            style: 'currency',
+            currency: 'USD',
+          }),
+        ];
       },
       set(value: string) {
         let monthlyRevenue = parseFloat(value);

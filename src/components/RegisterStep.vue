@@ -21,7 +21,7 @@
           >Li e concordo com os Termos de Uso.</el-checkbox
         >
       </el-form-item>
-      <div>
+      <div class="btn-pages">
         <el-form-item>
           <el-button type="info" @click="previousStep()" class="btn-next"
             >Voltar</el-button
@@ -38,6 +38,7 @@
 </template>
 
 <script lang="ts">
+import router from '@/router';
 import Vue from 'vue';
 export default Vue.extend({
   name: 'Signup',
@@ -84,15 +85,7 @@ export default Vue.extend({
         this.$store.commit('setEmail', { email: value });
       },
     },
-    // isTermsChecked: {
-    //   get() {
-    //     return this.$store.state.signup.isTermsChecked;
-    //   },
-    //   set(value: boolean) {
-    //     console.log(value);
-    //     this.$store.commit('setIsTermsChecked', { isTermsChecked: value });
-    //   },
-    // },
+
     signupForm(): object {
       return {
         email: this.email,
@@ -107,7 +100,8 @@ export default Vue.extend({
         (valid: boolean) => {
           if (valid) {
             this.$store.commit('setProgressPerc', { progressPerc: 100 });
-            alert(this.$store.state.signup);
+            console.table(JSON.stringify(this.$store.state.signup));
+            router.push('/proposals');
           } else {
             return false;
           }

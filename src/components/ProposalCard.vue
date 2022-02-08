@@ -1,11 +1,20 @@
 <template>
   <div class="proposal-card">
     <div class="card-info">
-      <h1 class="card-title">Proposta {{ proposalIndex }}</h1>
+      <h1 class="card-title">
+        Proposta {{ isChosen ? 'Escolhida' : proposalIndex }}
+      </h1>
 
       <div class="amount">
         <h3 class="subtitle">Valor disponibilizado</h3>
-        <h2 class="amount-title">${{ offerAmount }}</h2>
+        <h2 class="amount-title">
+          {{
+            offerAmount.toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            })
+          }}
+        </h2>
       </div>
 
       <div>
@@ -35,29 +44,50 @@
       </div>
 
       <div class="installments">
-        <h2 class="card-title">Em quantas parcelas?</h2>
-        <!-- <h3 class="subtitle">Quantidade de parcelas</h3> -->
-        <el-button
-          type="text"
-          class="installment-button"
-          @click="removeInstallment()"
-          ><font-awesome-icon icon="minus" size="lg"
-        /></el-button>
-        <span class="installments-count">{{ installments }}</span>
-        <el-button
-          type="text"
-          class="installment-button"
-          @click="addInstallment()"
-          ><font-awesome-icon icon="plus" size="lg"
-        /></el-button>
+        <h2 v-if="isChosen" class="subtitle">Quantidade de parcelas</h2>
+        <h2 v-else class="card-title">Em quantas parcelas?</h2>
+        <h3 v-if="isChosen" class="amount-title">{{ installmentsChosen }}</h3>
+        <div v-else>
+          <el-button
+            type="text"
+            class="installment-button"
+            @click="removeInstallment()"
+            ><font-awesome-icon icon="minus" size="lg"
+          /></el-button>
+          <span class="installments-count">{{ installments }}</span>
+          <el-button
+            type="text"
+            class="installment-button"
+            @click="addInstallment()"
+            ><font-awesome-icon icon="plus" size="lg"
+          /></el-button>
+        </div>
       </div>
 
+      <div>
+        <span class="subtitle">Taxa</span>
+        <h2 class="amount-title">
+          {{
+            taxValue.toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            })
+          }}
+        </h2>
+      </div>
       <div class="installment-value">
         <span class="subtitle">Valor de cada parcela</span>
-        <h2 class="amount-title">${{ installmentValue }}</h2>
+        <h2 class="amount-title">
+          {{
+            installmentValue.toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            })
+          }}
+        </h2>
       </div>
     </div>
-    <div class="accept-container">
+    <div v-if="!isChosen" class="accept-container">
       <el-button class="btn-accept" type="primary" round @click="chooseOffer()"
         >Aceitar Proposta</el-button
       >
@@ -66,6 +96,7 @@
 </template>
 
 <script lang="ts">
+import router from '@/router';
 import Vue from 'vue';
 
 export default Vue.extend({
@@ -75,6 +106,9 @@ export default Vue.extend({
     proposalIndex: { type: Number },
     monthlyRevenue: { type: Number, required: true },
     amountPerc: { type: Number, required: true },
+    isChosen: { type: Boolean, required: true },
+    taxValue: { type: Number, required: true },
+    installmentsChosen: { type: Number },
     offerId: { type: Number },
   },
   data() {
@@ -116,6 +150,7 @@ export default Vue.extend({
       this.$store.commit('setOffer', {
         offer: { id: this.offerId, installments: this.installments },
       });
+      router.push('/');
     },
   },
 });
@@ -126,7 +161,7 @@ export default Vue.extend({
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1),
     0 8px 10px -6px rgb(0 0 0 / 0.1);
   color: white;
-  width: 300px;
+  max-width: 285px;
   padding: 3rem 1rem 3rem 1rem;
   text-align: left;
 }
@@ -140,7 +175,7 @@ export default Vue.extend({
   text-align: left;
 }
 
-.card-info div {
+.card-info > div {
   margin-top: 1.4rem;
 }
 
@@ -164,7 +199,7 @@ export default Vue.extend({
   margin: 0rem;
   font-size: 0.9rem;
   font-weight: 300;
-  color: #b3b5bc;
+  color: #bbbabf;
   display: block;
 }
 
