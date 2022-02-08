@@ -6,7 +6,7 @@
       </el-col>
       <el-col :xs="24" :sm="12" class="login-col">
         <div class="login-container">
-          <SignUp />
+          <Login />
         </div>
       </el-col>
     </el-row>
@@ -17,12 +17,10 @@
 import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/display.css';
 import Login from '@/components/Login.vue';
-import SignUp from '@/components/SignUp.vue';
 export default Vue.extend({
-  name: 'Login',
+  name: 'LoginView',
   components: {
     Login,
-    SignUp,
   },
 });
 </script>

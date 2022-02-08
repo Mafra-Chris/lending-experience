@@ -11,9 +11,9 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="Senha" prop="password">
-        <router-link to="/password-lost" class="password-lost"
+        <!-- <router-link to="/password-lost" class="password-lost"
           >Esqueceu a senha?</router-link
-        >
+        > -->
 
         <el-input v-model="loginForm.password" show-password></el-input>
       </el-form-item>
@@ -27,9 +27,9 @@
       </el-form-item>
     </el-form>
     <el-divider></el-divider>
-    <router-link to="/sign-up" class="link-sign-up">
+    <router-link to="/signup" class="link-sign-up">
       Ainda não tem conta?
-      <span> Cadastre-se agora</span>
+      <span class="brand-blue"> Cadastre-se agora</span>
     </router-link>
   </div>
 </template>
