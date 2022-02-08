@@ -3,7 +3,7 @@ const state = {
   name: null,
   offer: {
     id: 0,
-    installments: 0
+    installments: 12
   }
 };
 
@@ -19,7 +19,7 @@ const mutations = {
   setIsLogged(state: any, payload: any) {
     state.isLogged = payload.isLogged
   },
-  setName(state: any, payload: any) {
+  setUserName(state: any, payload: any) {
     state.name = payload.name
   },
   setOffer(state: any, payload: any) {
