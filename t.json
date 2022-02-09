@@ -1,0 +1,39 @@
+{
+  "id_company": 1,
+  "name": "a55",
+  "cnpj": "49.135.381/0001-05",
+  "segment": "financas",
+  "website": "google.com",
+  "monthly_revenue": 200000,
+  "money_purpose": "divida",
+  "email": "mafradesouza@gmail.com",
+  "password": "1234",
+  "chosen_offer": null,
+  "installments": null
+}
+// [
+//   {
+//     "type": "bigger",
+//     "amount_perc": 100,
+//     "interest": 1,
+//     "tax_value": 0
+//   },
+//   {
+//     "type": "bigger",
+//     "amount_perc": 75,
+//     "interest": 0.75,
+//     "tax_value": 0
+//   },
+//   {
+//     "type": "bigger",
+//     "amount_perc": 50,
+//     "interest": 0.5,
+//     "tax_value": 0
+//   },
+//   {
+//     "type": "lower",
+//     "amount_perc": 75,
+//     "interest": 1.25,
+//     "tax_value": 10
+//   }
+// ]
