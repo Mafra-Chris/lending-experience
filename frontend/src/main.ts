@@ -8,12 +8,15 @@ import { faChevronCircleRight, faPlus, faMinus, faSignOutAlt } from '@fortawesom
 import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './assets/css/main.css';
+import axios from 'axios';
 
 library.add(faChevronCircleRight, faPlus, faMinus, faSignOutAlt, faTimesCircle)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.config.productionTip = false
+
+axios.defaults.baseURL = 'http://localhost:8000/';
 
 new Vue({
   router,
