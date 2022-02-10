@@ -173,7 +173,7 @@ export default Vue.extend({
           installments: this.installments,
         })
         .then(async (response: AxiosResponse) => {
-          router.push('/');
+          router.push('/chosen');
         })
         .catch((error) => {
           this.errorMessage = {

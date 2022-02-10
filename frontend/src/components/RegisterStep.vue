@@ -14,13 +14,7 @@
       <el-form-item label="Email" prop="email">
         <el-input v-model="email"></el-input>
       </el-form-item>
-      <el-form-item label="Senha" prop="password">
-        <el-input
-          v-model="password"
-          show-password
-          placeholder="Mínimo 8 caracteres"
-        ></el-input>
-      </el-form-item>
+
       <el-form-item prop="isTermsChecked">
         <el-checkbox v-model="isTermsChecked"
           >Li e concordo com os Termos de Uso.</el-checkbox
@@ -61,22 +55,9 @@ export default Vue.extend({
     return {
       isError: false,
       errorMessage: { message: '', status: 0 } as ErrorMessage,
-      password: '',
       isTermsChecked: false,
       rules: {
         isTermsChecked: [{ validator: verifyTerms, trigger: 'blur' }],
-        password: [
-          {
-            required: true,
-            message: 'Insira uma senha válida.',
-            trigger: 'blur',
-          },
-          {
-            min: 8,
-            message: 'Senha deve ter no mínimo 8 caracteres.',
-            trigger: 'blur',
-          },
-        ],
         email: [
           {
             required: true,
@@ -101,7 +82,6 @@ export default Vue.extend({
       return {
         email: this.email,
         isTermsChecked: this.isTermsChecked,
-        password: this.password,
       };
     },
   },
@@ -121,7 +101,6 @@ export default Vue.extend({
                 monthly_revenue: this.$store.state.signup.monthlyRevenue,
                 money_purpose: this.$store.state.signup.moneyPurpose,
                 email: this.$store.state.signup.email,
-                password: this.password,
                 chosen_offer: null,
                 installments: null,
               })

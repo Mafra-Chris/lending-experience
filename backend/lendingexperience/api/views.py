@@ -82,7 +82,7 @@ def companyCreate(request):
         company = serializer.save()
         print(company.id_company)
         if serializer.data['monthly_revenue'] <= 10000:
-            offer = Offer.objects.get(type='lower')
+            offer = Offer.objects.filter(type='lower')
 
         elif serializer.data['monthly_revenue'] > 10000:
             offer = Offer.objects.filter(type='bigger')

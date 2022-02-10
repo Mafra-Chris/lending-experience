@@ -33,10 +33,7 @@ class CreateCompanySerializer(serializers.ModelSerializer):
                   'money_purpose',
                   'email',
                   'chosen_offer',
-                  'installments', 'password')
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
+                  'installments')
 
 
 class CreditProposalsSerializer(serializers.ModelSerializer):

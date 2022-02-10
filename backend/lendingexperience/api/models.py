@@ -18,7 +18,6 @@ class Company(models.Model):
     monthly_revenue = models.FloatField()
     money_purpose = models.CharField(max_length=100)
     email = models.EmailField()
-    password = models.CharField(max_length=100)
     chosen_offer = models.ForeignKey(
         Offer, on_delete=models.CASCADE, blank=True, null=True)
     installments = models.IntegerField(blank=True, null=True)

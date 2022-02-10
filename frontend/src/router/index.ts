@@ -9,22 +9,17 @@ const routes: Array<RouteConfig> = [
 
   {
     path: '/',
-    name: 'Home',
+    name: 'SignUp',
+
+    component: () => import('../views/SignUp.vue')
+  },
+  {
+    path: '/chosen',
+    name: 'Chosen',
 
     component: () => import('../views/Home.vue')
   },
-  {
-    path: '/login',
-    name: 'Login',
 
-    component: () => import('../views/Login.vue')
-  },
-  {
-    path: '/signup',
-    name: 'SignUp',
-
-    component: SignUp
-  },
   {
     path: '/proposals',
     name: 'proposals',

@@ -1,0 +1,42 @@
+[
+  {
+    "model": "api.Offer",
+    "pk": 1,
+    "fields": {
+      "type": "bigger",
+      "amount_perc": 100,
+      "interest": 1,
+      "tax_value": 0
+    }
+  },
+  {
+    "model": "api.Offer",
+    "pk": 2,
+    "fields": {
+      "type": "bigger",
+      "amount_perc": 75,
+      "interest": 0.75,
+      "tax_value": 0
+    }
+  },
+  {
+    "model": "api.Offer",
+    "pk": 3,
+    "fields": {
+      "type": "bigger",
+      "amount_perc": 50,
+      "interest": 0.5,
+      "tax_value": 0
+    }
+  },
+  {
+    "model": "api.Offer",
+    "pk": 4,
+    "fields": {
+      "type": "lower",
+      "amount_perc": 75,
+      "interest": 1.25,
+      "tax_value": 10
+    }
+  }
+]
