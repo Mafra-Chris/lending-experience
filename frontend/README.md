@@ -1,6 +1,9 @@
 # lending-experience
 
-## Project setup
+## Frontend Project setup
+```
+cd frontend
+```
 ```
 npm install
 ```
@@ -10,10 +13,25 @@ npm install
 npm run serve
 ```
 
-### Compiles and minifies for production
+## Backend Project setup (another powershell/cmd)
 ```
-npm run build
+cd backend
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+```
+pip install -r requirements.txt
+```
+```
+cd .\lendingexperience\
+```
+```
+python manage.py makemigrations
+```
+```
+python manage.py migrate
+```
+```
+python manage.py loaddata offer_data.json
+```
+```
+python manage.py runserver
+```
