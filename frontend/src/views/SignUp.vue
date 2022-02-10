@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/display.css';
-import SignUp from '@/components/SignUp.vue';
+import SignUp from '../components/SignUp.vue';
 export default Vue.extend({
   name: 'SignUpView',
   components: {

@@ -12,15 +12,15 @@
           Escolha a proposta que melhor se adequa a sua empresa
         </h1>
         <ul id="v-for-object" class="proposal-cards">
-          <li v-for="(offer, index) in biggerOffers" v-bind:key="index">
+          <li v-for="(offer, index) in offers" v-bind:key="index">
             <ProposalCard
               :interestRate="offer.interest"
               :proposalIndex="index + 1"
               :monthlyRevenue="monthlyRevenue"
-              :amountPerc="offer.amountPerc"
-              :offerId="offer.id"
+              :amountPerc="offer.amount_perc"
+              :offerId="offer.id_offer"
               :isChosen="false"
-              :taxValue="offer.taxValue"
+              :taxValue="offer.tax_value"
             />
           </li>
         </ul>
@@ -35,13 +35,13 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import ProposalCard from '@/components/ProposalCard.vue';
+import ProposalCard from '../components/ProposalCard.vue';
 import axios, { AxiosResponse } from 'axios';
-import { Offer } from '@/types/offer';
-import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
-import { ErrorMessage } from '@/types/error';
-import ErrorDialog from '@/components/ErrorDialog.vue';
+import { Offer } from '../types/offer';
+import Navbar from '../components/Navbar.vue';
+import Footer from '../components/Footer.vue';
+import { ErrorMessage } from '../types/error';
+import ErrorDialog from '../components/ErrorDialog.vue';
 export default Vue.extend({
   name: 'CreditProposals',
   components: {
@@ -53,8 +53,8 @@ export default Vue.extend({
   data() {
     return {
       monthlyRevenue: 0,
-      biggerOffers: [] as Offer[],
-      lowerOffers: [] as Offer[],
+      offers: [] as Offer[],
+
       isError: false,
       errorMessage: { message: '', status: 0 } as ErrorMessage,
       isLoaded: false,
@@ -64,9 +64,9 @@ export default Vue.extend({
     let flag = true;
 
     await axios
-      .get('https://61fb29d587801d0017a2c40d.mockapi.io/userNormal')
+      .get(`api/company-detail/${this.$store.state.user.idCompany}/`)
       .then(async (response: AxiosResponse) => {
-        this.monthlyRevenue = response.data.monthlyRevenue;
+        this.monthlyRevenue = response.data.monthly_revenue;
       })
       .catch((error) => {
         flag = false;
@@ -77,15 +77,9 @@ export default Vue.extend({
       });
     if (flag) {
       await axios
-        .get('https://61fb29d587801d0017a2c40d.mockapi.io/offers')
+        .get(`/api/proposal-detail/${this.$store.state.user.idCompany}/`)
         .then(async (response: AxiosResponse) => {
-          response.data.forEach((offer: Offer) => {
-            if (offer.type === 'bigger') {
-              this.biggerOffers.push(offer);
-            } else if (offer.type === 'lower') {
-              this.lowerOffers.push(offer);
-            }
-          });
+          this.offers = response.data;
           this.isLoaded = true;
         })
         .catch((error) => {

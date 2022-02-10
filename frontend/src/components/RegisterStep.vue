@@ -1,5 +1,10 @@
 <template>
   <div>
+    <ErrorDialog
+      :message="errorMessage.message"
+      :status="errorMessage.status"
+      :isDialogVisible="isError"
+    />
     <el-form
       :rules="rules"
       ref="signupForm"
@@ -38,10 +43,14 @@
 </template>
 
 <script lang="ts">
-import router from '@/router';
+import router from '../router';
 import Vue from 'vue';
+import axios, { AxiosResponse } from 'axios';
+import { ErrorMessage } from '../types/error';
+import ErrorDialog from '../components/ErrorDialog.vue';
 export default Vue.extend({
   name: 'Signup',
+  components: { ErrorDialog },
   data() {
     const verifyTerms = (rule: object, value: boolean, callback: Function) => {
       if (value === false) {
@@ -50,6 +59,8 @@ export default Vue.extend({
       return callback();
     };
     return {
+      isError: false,
+      errorMessage: { message: '', status: 0 } as ErrorMessage,
       password: '',
       isTermsChecked: false,
       rules: {
@@ -97,11 +108,36 @@ export default Vue.extend({
   methods: {
     finishForm() {
       (this.$refs['signupForm'] as HTMLFormElement).validate(
-        (valid: boolean) => {
+        async (valid: boolean) => {
           if (valid) {
             this.$store.commit('setProgressPerc', { progressPerc: 100 });
-            console.table(JSON.stringify(this.$store.state.signup));
-            router.push('/proposals');
+
+            await axios
+              .post('/api/company-create/', {
+                name: this.$store.state.signup.name,
+                cnpj: this.$store.state.signup.cnpj,
+                segment: this.$store.state.signup.segmentOption,
+                website: this.$store.state.signup.website,
+                monthly_revenue: this.$store.state.signup.monthlyRevenue,
+                money_purpose: this.$store.state.signup.moneyPurpose,
+                email: this.$store.state.signup.email,
+                password: this.password,
+                chosen_offer: null,
+                installments: null,
+              })
+              .then(async (response: AxiosResponse) => {
+                this.$store.commit('setIdCompany', {
+                  idCompany: response.data.id_company,
+                });
+                router.push('/proposals');
+              })
+              .catch((error) => {
+                this.errorMessage = {
+                  message: 'Erro ao criar empresa.',
+                  status: error.response.status,
+                };
+                this.isError = true;
+              });
           } else {
             return false;
           }

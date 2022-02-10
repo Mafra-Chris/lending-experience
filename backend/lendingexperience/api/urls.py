@@ -1,5 +1,9 @@
 from unicodedata import name
 from django.urls import path, include
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 from . import views
 urlpatterns = [
 
@@ -15,4 +19,7 @@ urlpatterns = [
          views.proposalDetail, name="proposal-detail"),
     path('choose-offer/<str:id_company>/',
          views.chooseOffer, name="choose-offer"),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
 ]

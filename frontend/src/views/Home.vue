@@ -21,7 +21,7 @@
             :monthlyRevenue="monthlyRevenue"
             :amountPerc="chosenOffer.amountPerc"
             :isChosen="true"
-            :installmentsChosen="chosenInstallments"
+            :installmentsChosen="installments"
             :taxValue="chosenOffer.taxValue"
           />
         </el-col>
@@ -40,14 +40,14 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Navbar from '@/components/Navbar.vue';
-import ProposalCard from '@/components/ProposalCard.vue';
-import Footer from '@/components/Footer.vue';
-import ErrorDialog from '@/components/ErrorDialog.vue';
+import Navbar from '../components/Navbar.vue';
+import ProposalCard from '../components/ProposalCard.vue';
+import Footer from '../components/Footer.vue';
+import ErrorDialog from '../components/ErrorDialog.vue';
 import axios, { AxiosResponse } from 'axios';
 import 'element-ui/lib/theme-chalk/display.css';
-import { Offer } from '@/types/offer';
-import { ErrorMessage } from '@/types/error';
+import { Offer } from '../types/offer';
+import { ErrorMessage } from '../types/error';
 import { AtomSpinner } from 'epic-spinners';
 
 export default Vue.extend({
@@ -55,8 +55,11 @@ export default Vue.extend({
   components: { Navbar, ProposalCard, Footer, ErrorDialog, AtomSpinner },
   data() {
     return {
+      companyName: '',
       monthlyRevenue: 0,
       chosenOffer: {} as Offer,
+      offerId: 0,
+      installments: 0,
       isLoaded: false,
       isError: false,
       errorMessage: {
@@ -69,9 +72,12 @@ export default Vue.extend({
     let flag = true;
 
     await axios
-      .get('https://61fb29d587801d0017a2c40d.mockapi.io/userNormal')
+      .get(`api/company-detail/${this.$store.state.user.idCompany}/`)
       .then(async (response: AxiosResponse) => {
-        this.monthlyRevenue = response.data.monthlyRevenue;
+        this.monthlyRevenue = response.data.monthly_revenue;
+        this.offerId = response.data.chosen_offer;
+        this.installments = response.data.installments;
+        this.companyName = response.data.name;
       })
       .catch((error) => {
         flag = false;
@@ -83,11 +89,18 @@ export default Vue.extend({
 
     if (flag) {
       await axios
-        .get('https://61fb29d587801d0017a2c40d.mockapi.io/offers/2')
+        .get(`api/offer-detail/${this.offerId}/`)
         .then(async (response: AxiosResponse) => {
-          Object.assign(this.chosenOffer, response.data);
+          console.log(response.data);
+          this.chosenOffer = {
+            type: response.data.type,
+            amountPerc: response.data.amount_perc,
+            interest: response.data.interest,
+            taxValue: response.data.tax_value,
+            id: response.data.id_offer,
+          };
+          console.log(this.chosenOffer);
           this.isLoaded = true;
-          console.log(this.$store.state.user.offer.id);
         })
         .catch((error) => {
           flag = false;
@@ -101,14 +114,6 @@ export default Vue.extend({
     if (!flag) {
       this.isError = true;
     }
-  },
-  computed: {
-    chosenInstallments(): number {
-      return this.$store.state.user.offer.installments;
-    },
-    companyName(): string {
-      return this.$store.state.signup.name;
-    },
   },
 });
 </script>

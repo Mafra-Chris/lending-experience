@@ -1,11 +1,12 @@
 
 from django.shortcuts import render
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from .serializers import OffersSerializers, CompanySerializer, CreditProposalsSerializer
+from .serializers import OffersSerializers, CompanySerializer, CreditProposalsSerializer, CreateCompanySerializer
 from .models import Company, Offer, CreditProposal
 from django.core import serializers
+from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['GET'])
@@ -73,10 +74,11 @@ def companyDetail(request, pk):
 @api_view(['POST'])
 def companyCreate(request):
 
-    serializer = CompanySerializer(data=request.data)
+    serializer = CreateCompanySerializer(data=request.data)
 
     if serializer.is_valid():
         offer = None
+
         company = serializer.save()
         print(company.id_company)
         if serializer.data['monthly_revenue'] <= 10000:
@@ -92,6 +94,7 @@ def companyCreate(request):
 
     else:
         print(serializer.errors)
+        return Response(serializer.errors, 400)
 
     return Response(serializer.data)
 
@@ -110,10 +113,11 @@ def proposalDetail(request, id_company):
 def chooseOffer(request, id_company):
     company = Company.objects.get(id_company=id_company)
 
-    data = {"chosen_offer": request.data['id_offer']}
+    data = {"chosen_offer": request.data['chosen_offer'],
+            "installments": request.data['installments']}
     serializer = CompanySerializer(company, data=data, partial=True)
     if(serializer.is_valid()):
         serializer.save()
         return Response(serializer.data)
 
-    return Response(serializer.errors)
+    return Response(serializer.errors, 400)

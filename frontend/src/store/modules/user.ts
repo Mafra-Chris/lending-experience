@@ -1,10 +1,6 @@
 const state = {
-  isLogged: false,
+  idCompany: null,
   name: null,
-  offer: {
-    id: 0,
-    installments: 12
-  }
 };
 
 const getters = {
@@ -24,6 +20,9 @@ const mutations = {
   },
   setOffer(state: any, payload: any) {
     state.offer = payload.offer
+  },
+  setIdCompany(state: any, payload: any) {
+    state.idCompany = payload.idCompany
   },
 };
 

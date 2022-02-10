@@ -1,5 +1,11 @@
 <template>
   <div class="proposal-card">
+    <ErrorDialog
+      :message="errorMessage.message"
+      :status="errorMessage.status"
+      :isDialogVisible="isError"
+    />
+
     <div class="card-info">
       <h1 class="card-title">
         Proposta {{ isChosen ? 'Escolhida' : proposalIndex }}
@@ -96,11 +102,16 @@
 </template>
 
 <script lang="ts">
-import router from '@/router';
+import router from '../router';
 import Vue from 'vue';
-
+import axios, { AxiosResponse } from 'axios';
+import { ErrorMessage } from '../types/error';
+import ErrorDialog from '../components/ErrorDialog.vue';
 export default Vue.extend({
   name: 'ProposalCard',
+  components: {
+    ErrorDialog,
+  },
   props: {
     interestRate: { type: Number, required: true },
     proposalIndex: { type: Number },
@@ -114,6 +125,8 @@ export default Vue.extend({
   data() {
     return {
       installments: 1,
+      isError: false,
+      errorMessage: { message: '', status: 0 } as ErrorMessage,
     };
   },
   computed: {
@@ -121,9 +134,16 @@ export default Vue.extend({
       return this.monthlyRevenue * (this.amountPerc / 100);
     },
     installmentValue(): number {
-      let value =
-        (this.interestRate / 100) * this.offerAmount +
-        this.offerAmount / this.installments;
+      let value;
+      if (this.isChosen) {
+        value =
+          (this.interestRate / 100) * this.offerAmount +
+          this.offerAmount / this.installmentsChosen;
+      } else {
+        value =
+          (this.interestRate / 100) * this.offerAmount +
+          this.offerAmount / this.installments;
+      }
 
       return this.round2Decimals(value);
     },
@@ -146,11 +166,22 @@ export default Vue.extend({
     round2Decimals(number: number) {
       return Math.round(number * 1e2) / 1e2;
     },
-    chooseOffer() {
-      this.$store.commit('setOffer', {
-        offer: { id: this.offerId, installments: this.installments },
-      });
-      router.push('/');
+    async chooseOffer() {
+      await axios
+        .post(`/api/choose-offer/${this.$store.state.user.idCompany}/`, {
+          chosen_offer: this.offerId,
+          installments: this.installments,
+        })
+        .then(async (response: AxiosResponse) => {
+          router.push('/');
+        })
+        .catch((error) => {
+          this.errorMessage = {
+            message: 'Erro ao escolher proposta.',
+            status: error.response.status,
+          };
+          this.isError = true;
+        });
     },
   },
 });

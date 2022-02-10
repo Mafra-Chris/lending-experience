@@ -16,7 +16,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import 'element-ui/lib/theme-chalk/display.css';
-import Login from '@/components/Login.vue';
+import Login from '../components/Login.vue';
 export default Vue.extend({
   name: 'LoginView',
   components: {
